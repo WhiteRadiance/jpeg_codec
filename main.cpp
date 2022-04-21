@@ -17,12 +17,10 @@ string generate_obj_name(string ori_name, string ext_name);
 void active_JPEG_dec(string path_dep, string path_des, string fmt);
 
 
-//ÔÚcmdÖĞÊ¹ÓÃffmpeg´ò¿ªyuvÎÄ¼şÖ¸Áî: ffplay -f rawvideo -pixel_format yuv420p -s 1080*2340 xxx.yuv
+//åœ¨cmdä¸­ä½¿ç”¨ffmpegæ‰“å¼€yuvæ–‡ä»¶æŒ‡ä»¤: ffplay -f rawvideo -pixel_format yuv420p -s 1080*2340 xxx.yuv
 int main(int argc, char* argv[])
 {
 	string	path = "C:\\Users\\93052\\Desktop\\SDcard\\PICTURE\\jpg\\";
-	//string	path_deprt = "D:\\±ßÖ¾Ææ\\ÑĞÒ»²ÎÈü\\ÖĞĞËÅõÔÂ2021\\data\\";
-	//string	filename = "myself_ps.jpg";
 	string	filename = "fun.jpg";
 	string	ext_name = ".yuv";
 
@@ -46,9 +44,9 @@ void active_JPEG_dec(string path_dep, string path_des, string fmt)
 		cout << "[ERROR]invalid argument <opt>." << endl;
 		return;
 	}
-	//´òÓ¡¾¯¸æ
+	//æ‰“å°è­¦å‘Š
 	cout << " -------------------------------------------------------------------------" << endl;
-	cout << " [warn]1.¶ÔÓÚ³¬´ó³ß´çÍ¼Æ¬Ó¦¸Ã·Ö´ó¿éÒÀ´Î´¦ÀíÒÔÌá¸ßËÙ¶È  2.³ÌĞò²»Ö§³Öyuv422 " << endl;
+	cout << " [warn]1.å¯¹äºè¶…å¤§å°ºå¯¸å›¾ç‰‡åº”è¯¥åˆ†å¤§å—ä¾æ¬¡å¤„ç†ä»¥æé«˜é€Ÿåº¦  2.ç¨‹åºä¸æ”¯æŒyuv422 " << endl;
 	cout << " -------------------------------------------------------------------------" << endl;
 
 	cout << " [info]source path: " << path_dep << endl;
@@ -60,7 +58,7 @@ void active_JPEG_dec(string path_dep, string path_des, string fmt)
 	}
 	cout << "+[note]open jpeg file successfully." << endl;
 
-	//Ô¤¶ÁÈ¡Í¼Æ¬³ß´çºÍ²ÉÑù¸ñÊ½
+	//é¢„è¯»å–å›¾ç‰‡å°ºå¯¸å’Œé‡‡æ ·æ ¼å¼
 	u8  sample_t = 0;
 	u16 width = 0, height = 0;
 	pre_rd_SOF0_info(fp_rd, &sample_t, &width, &height);
@@ -76,19 +74,19 @@ void active_JPEG_dec(string path_dep, string path_des, string fmt)
 	}
 	cout << "and you expect to convert this jpeg " << fmt << "." << endl;
 
-	//¸ù¾İYUV¸ñÊ½ĞŞÕıU/VÆ½ÃæµÄ´óĞ¡
+	//æ ¹æ®YUVæ ¼å¼ä¿®æ­£U/Vå¹³é¢çš„å¤§å°
 	size_t uvplane_size = 0;
 	if (fmt == "toYUV420")		uvplane_size = (size_t)((height + 1) / 2) * ((width + 1) / 2);
-	else						uvplane_size = (size_t)height * width;
+	else				uvplane_size = (size_t)height * width;
 
-	//¿ª±ÙY/U/VµÄÄÚ´æ
+	//å¼€è¾ŸY/U/Vçš„å†…å­˜
 	u8* yuv_Y = (u8*)malloc(sizeof(u8) * width * height);
 	u8* yuv_U = (u8*)malloc(sizeof(u8) * uvplane_size);
 	u8* yuv_V = (u8*)malloc(sizeof(u8) * uvplane_size);
 	if (yuv_Y == NULL || yuv_U == NULL || yuv_V == NULL)
 		return;
 	
-	//½âÂë
+	//è§£ç 
 	cout << "\n#[work]start to decode jpeg ..." << endl;
 	if (fmt == "toYUV420")
 		Dec_JPEG_to_YUV(fp_rd, yuv_Y, yuv_U, yuv_V, true);
@@ -105,7 +103,7 @@ void active_JPEG_dec(string path_dep, string path_des, string fmt)
 	}
 	cout << "+[note]generate obj file successfully." << endl;
 
-	//Ğ´Èë
+	//å†™å…¥
 	cout << "\n#[work]writing data to obj file ..." << endl;
 	fwrite(yuv_Y, (size_t)width * height, 1, fp_wr);
 	fwrite(yuv_U, (size_t)uvplane_size, 1, fp_wr);
@@ -116,7 +114,7 @@ void active_JPEG_dec(string path_dep, string path_des, string fmt)
 	fp_wr = NULL;
 	cout << "+[note]obj file is close." << endl;
 
-	//ÊÍ·Å¿Õ¼ä
+	//é‡Šæ”¾ç©ºé—´
 	free(yuv_Y);
 	free(yuv_U);
 	free(yuv_V);
