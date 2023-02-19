@@ -2,6 +2,7 @@
 JPEG图片的编解码
 ## CAUTION
 This codec just implements the conversion between a JPEG file and a raw YUV file.
+
 You'd better have some software to help you display a picture in YUV format.
 ## jpeg.h
 Defines jpeg structure, quantization table, Huffman table, DCT matrix, NR_code, NR_values and some buffers.
